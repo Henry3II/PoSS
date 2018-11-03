@@ -77,6 +77,7 @@ dllmain.cpp 中有捕获键盘消息的存储位置
    检测到int 3指令, 系统首先从断点链表中寻找对应的断点信息结构体(SEH)，若没有找到则会直接跳出  
 4. 修改PE头:  
    ![](./pic/PE_exploit.png)
+   只对ollydbg1.0有效
 ### 提权
 *RtlAdjustPrivilege(ULONG Privilege, BOOLEAN Enable, BOOLEAN CurrentThread, PBOOLEAN Enabled)* = 
 *[OpenProcessToken](https://docs.microsoft.com/en-us/windows/desktop/api/processthreadsapi/nf-processthreadsapi-openprocesstoken)()* + 
@@ -109,6 +110,26 @@ dllmain.cpp 中有捕获键盘消息的存储位置
         ~~添加服务?~~ In windows 7 service cannot interact with user desktop. So it is impossible. [ref](https://stackoverflow.com/questions/16665852/keyboard-hook-as-a-windows-service)
     </p>
 </details>
+
+### 加密
+
+1. 异或加密算法：
+数学运算符为XOR(exclusive OR),通常用"^"的符号表示。
+在二进制中：
+1 XOR 0=1
+0 XOR 1=1
+1 XOR 1=0
+0 XOR 0=0
+若两个数相同取0，不同取1。可以根据该原理实现对文件的加解密。
+
+2. 通过对读入的文件的二进制内容与密钥做异或处理加密，从而达到加密文件的目的，加密密钥设置为"4@!32^*125"；
+加密前的文件内容：
+![1541246488 1](https://user-images.githubusercontent.com/15226288/47951980-6b708680-dfa3-11e8-95a2-499119d3577a.png)
+
+加密后的文件内容：
+![1541246488 1](https://user-images.githubusercontent.com/15226288/47951972-5b58a700-dfa3-11e8-9ca4-faf74843e611.png)
+
+3. 解密文件的操作为使用相同密钥文件对加密后的文件进行相同异或操作，从而达到解密文件的目的。
 
 ## Environment
 虚拟机: Win XP SP3 + VS2010 + ANSI  
